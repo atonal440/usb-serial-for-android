@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#61671B</color>
     <color name="colorAccent">#D8E33B</color>
 
-    <color name="colorRecieveText">#00FF00</color>
+    <color name="colorReceiveText">#00FF00</color>
     <color name="colorSendText">#82CAFF</color>
     <color name="colorStatusText">#FFDB58</color>
 </resources>

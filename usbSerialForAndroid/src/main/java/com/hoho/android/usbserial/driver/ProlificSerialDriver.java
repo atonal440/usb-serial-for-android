@@ -327,7 +327,7 @@ public class ProlificSerialDriver implements UsbSerialDriver {
                             mStopReadStatusThread = true;
                             mReadStatusThread.join();
                         } catch (Exception e) {
-                            Log.w(TAG, "An error occured while waiting for status read thread", e);
+                            Log.w(TAG, "An error occurred while waiting for status read thread", e);
                         }
                         mStopReadStatusThread = false;
                         mReadStatusThread = null;
@@ -376,7 +376,7 @@ public class ProlificSerialDriver implements UsbSerialDriver {
             baseline = 12000000 * 32;
             mantissa = baseline / baudRate;
             if (mantissa == 0) { // > unrealistic 384 MBaud
-                throw new UnsupportedOperationException("Baud rate to high");
+                throw new UnsupportedOperationException("Baud rate too high");
             }
             exponent = 0;
             if (mDeviceType == DeviceType.DEVICE_TYPE_T) {
@@ -385,7 +385,7 @@ public class ProlificSerialDriver implements UsbSerialDriver {
                         mantissa >>= 1;    /* divide by 2 */
                         exponent++;
                     } else { // < 7 baud
-                        throw new UnsupportedOperationException("Baud rate to low");
+                        throw new UnsupportedOperationException("Baud rate too low");
                     }
                 }
                 buf = mantissa + ((exponent & ~1) << 12) + ((exponent & 1) << 16) + (1 << 31);
@@ -396,7 +396,7 @@ public class ProlificSerialDriver implements UsbSerialDriver {
                         mantissa >>= 2;    /* divide by 4 */
                         exponent++;
                     } else { // < 45.8 baud
-                        throw new UnsupportedOperationException("Baud rate to low");
+                        throw new UnsupportedOperationException("Baud rate too low");
                     }
                 }
                 buf = mantissa + (exponent << 9) + (1 << 31);

@@ -194,7 +194,7 @@ public class FtdiSerialDriver implements UsbSerialDriver {
         private void setBaudrate(int baudRate) throws IOException {
             int divisor, subdivisor, effectiveBaudRate;
             if (baudRate > 3500000) {
-                throw new UnsupportedOperationException("Baud rate to high");
+                throw new UnsupportedOperationException("Baud rate too high");
             } else if(baudRate >= 2500000) {
                 divisor = 0;
                 subdivisor = 0;
@@ -209,7 +209,7 @@ public class FtdiSerialDriver implements UsbSerialDriver {
                 subdivisor = divisor & 0x07;
                 divisor >>= 3;
                 if (divisor > 0x3fff) // exceeds bit 13 at 183 baud
-                    throw new UnsupportedOperationException("Baud rate to low");
+                    throw new UnsupportedOperationException("Baud rate too low");
                 effectiveBaudRate = (24000000 << 1) / ((divisor << 3) + subdivisor);
                 effectiveBaudRate = (effectiveBaudRate +1) >> 1;
             }
@@ -356,7 +356,7 @@ public class FtdiSerialDriver implements UsbSerialDriver {
             int result = mConnection.controlTransfer(REQTYPE_HOST_TO_DEVICE, MODEM_CONTROL_REQUEST,
                     value ? MODEM_CONTROL_RTS_ENABLE : MODEM_CONTROL_RTS_DISABLE, mPortNumber+1, null, 0, USB_WRITE_TIMEOUT_MILLIS);
             if (result != 0) {
-                throw new IOException("Set DTR failed: result=" + result);
+                throw new IOException("Set RTS failed: result=" + result);
             }
             rts = value;
         }

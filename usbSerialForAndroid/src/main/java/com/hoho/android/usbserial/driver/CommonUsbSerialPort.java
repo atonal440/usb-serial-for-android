@@ -276,7 +276,7 @@ public abstract class CommonUsbSerialPort implements UsbSerialPort {
             int readMax = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) ? length : Math.min(length, MAX_READ_SIZE);
             nread = mConnection.bulkTransfer(mReadEndpoint, dest, readMax, timeout);
             // Android error propagation is improvable:
-            //  nread == -1 can be: timeout, connection lost, buffer to small, ???
+            //  nread == -1 can be: timeout, connection lost, buffer too small, ???
             if(nread == -1 && testConnection)
                 testConnection(MonotonicClock.millis() < endTime);
 
@@ -307,7 +307,7 @@ public abstract class CommonUsbSerialPort implements UsbSerialPort {
             }
             nread = Objects.requireNonNull(buf).position();
             // Android error propagation is improvable:
-            //   response != null & nread == 0 can be: connection lost, buffer to small, ???
+            //   response != null & nread == 0 can be: connection lost, buffer too small, ???
             if(nread == 0) {
                 testConnection(true);
             }
@@ -364,7 +364,7 @@ public abstract class CommonUsbSerialPort implements UsbSerialPort {
             if (actualLength <= 0) {
                 String msg = "Error writing " + requestLength + " bytes at offset " + offset + " of total " + src.length + " after " + elapsed + "msec, rc=" + actualLength;
                 if (timeout != 0) {
-                    // could be buffer full because: writing to fast, stopped by flow control
+                    // could be buffer full because: writing too fast, stopped by flow control
                     testConnection(elapsed < timeout, msg);
                     throw new SerialTimeoutException(msg, offset);
                 } else {

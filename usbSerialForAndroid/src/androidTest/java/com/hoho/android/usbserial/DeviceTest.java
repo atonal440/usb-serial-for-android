@@ -372,18 +372,18 @@ public class DeviceTest {
         int minBaudRate = ProlificSerialPortWrapper.isDeviceTypeT(usb.serialPort) ? 6 : 46;
         try {
             usb.setParameters(minBaudRate-1, 8, 1, UsbSerialPort.PARITY_NONE);
-            fail("baud rate to low expected");
+            fail("baud rate too low expected");
         } catch(UnsupportedOperationException ignored) {}
         usb.setParameters(minBaudRate, 8, 1, UsbSerialPort.PARITY_NONE);
         usb.setParameters(384_000_000, 8, 1, UsbSerialPort.PARITY_NONE);
         try {
             usb.setParameters(384_000_001, 8, 1, UsbSerialPort.PARITY_NONE);
-            fail("baud rate to high expected");
+            fail("baud rate too high expected");
         } catch(UnsupportedOperationException ignored) {}
         usb.setParameters(11_636_363, 8, 1, UsbSerialPort.PARITY_NONE);
         try {
             usb.setParameters(11_636_364, 8, 1, UsbSerialPort.PARITY_NONE);
-            fail("baud rate deviation to high expected");
+            fail("baud rate deviation too high expected");
         } catch(UnsupportedOperationException ignored) {}
 
         for(int baudRate : baudRates) {
@@ -428,7 +428,7 @@ public class DeviceTest {
         usb.open();
         try {
             usb.setParameters(183, 8, 1, UsbSerialPort.PARITY_NONE);
-            fail("baud rate to low expected");
+            fail("baud rate too low expected");
         } catch (UnsupportedOperationException ignored) {
         }
         usb.setParameters(184, 8, 1, UsbSerialPort.PARITY_NONE);
@@ -459,7 +459,7 @@ public class DeviceTest {
         usb.setParameters(3000000, 8, 1, UsbSerialPort.PARITY_NONE);
         try {
             usb.setParameters(4000000, 8, 1, UsbSerialPort.PARITY_NONE);
-            fail("baud rate to high expected");
+            fail("baud rate too high expected");
         } catch (UnsupportedOperationException ignored) {
         }
     }
@@ -914,7 +914,7 @@ public class DeviceTest {
     public void writeTimeout() throws Exception {
         // serial processing to slow for tests below, but they anyway only check shared code in CommonUsbSerialPort
         Assume.assumeFalse(usb.serialDriver instanceof CdcAcmSerialDriver);
-        // write buffer size detection unreliable as baud rate to high
+        // write buffer size detection unreliable as baud rate too high
         Assume.assumeFalse(usb.serialDriver instanceof Cp21xxSerialDriver && usb.serialDriver.getPorts().size() > 1);
 
         usb.open();
@@ -2513,12 +2513,12 @@ public class DeviceTest {
         try {
             byte[] buffer = new byte[0];
             usb.serialPort.read(buffer, UsbWrapper.USB_READ_WAIT);
-            fail("read buffer to small expected");
+            fail("read buffer too small expected");
         } catch(IllegalArgumentException ignored) {}
         try {
             byte[] buffer = new byte[1];
             usb.serialPort.read(buffer, 0, UsbWrapper.USB_READ_WAIT);
-            fail("read length to small expected");
+            fail("read length too small expected");
         } catch(IllegalArgumentException ignored) {}
 
         // use driver that does not override base class
